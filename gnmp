@@ -1,0 +1,36 @@
+#!/usr/bin/python3
+import sys
+import os
+
+scans = {
+    'normal': {
+        'command': 'sudo nmap -Pn -sV -sS -vv {}',
+        'filename': '{}:Pn,sV,sS:verbose.txt'
+    },
+    'all': {
+        'command': 'sudo nmap -Pn -sV -sS -p1-65535 -vv {}',
+        'filename': '{}:Pn,sV,sS,p1-65535:verbose.txt'
+    },
+    'udp': {
+        'command': 'sudo nmap -Pn -sV -sU -vv {}',
+        'filename': '{}:Pn,sV,sU:verbose.txt'
+    }
+}
+
+def usage():
+    print("{} [normal, all, udp] HOST".format(sys.argv[0]))
+
+def main():
+    if len(sys.argv) != 3:
+        usage()
+        exit(-1)
+    scan = scans[sys.argv[1]]
+    host = sys.argv[2]
+    command = scan['command'].format(host)
+    filename = scan['filename'].format(host)
+    os.system("{} > {}".format(command, filename))
+
+
+
+if __name__ == "__main__":
+    main()
